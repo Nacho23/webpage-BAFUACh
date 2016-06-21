@@ -1,0 +1,85 @@
+form, .cont_pass{
+    background: rgba(0,0,0,0.4);
+    padding: 10px 20px;
+    box-sizing: border-box;
+    
+    margin-top: 20px;
+    border-radius: 7px;
+}
+
+.cont_pass{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+h2{
+    color: #333;
+    text-align: center;
+    margin: 0;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+label{
+    font-size: 14px;
+}
+
+input{
+    margin-bottom: 20px;
+    padding: 3px;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+#input_pass{
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 17px;
+    
+    background: #333;
+    color: #fff;
+}
+
+#btnRegistrar{
+    width: 30%;
+    background: #31384a;
+    color: #fff;
+    padding: 5px;
+}
+
+#btnRegistrar:hover, #input_pass:hover{
+    cursor: pointer;
+}
+
+
+@media(min-width:480px){
+    #btnRegistrar{
+        width: 100%;
+        padding: 15px;
+    }
+    
+    input{
+        padding: 7px;
+        font-size: 17px;
+    }
+    
+    label{
+        font-size: 17px;
+    }
+    
+    h2{
+        font-size: 30px;
+    }
+}
+
+@media(min-width:1024px){
+    #btnRegistrar{
+        width: 80%;
+    }
+    
+    label{
+        font-size: 20px;
+    }
+}
