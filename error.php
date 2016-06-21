@@ -12,6 +12,7 @@
     <div class="container">
         <img src="imagenes/logo2.png" class="img-responsive">
         <h1 class="text-center">Página en Mantención</h1>
+        <h2>HOLA !!!</h2>
         <h3 class="text-center">Gracias por su comprensión</h3>
     </div>
     
