@@ -61,10 +61,11 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Authorization: key=AIzaSyDMJwXjAdbsFoWg2jMGRrzKM3zX4I3GhI4',
     'Content-Type: application/json'));
 
-if($cod == md5('J7FSAD782HFSLKADFA823KJFLFASD9')){
+#if($cod == md5('J7FSAD782HFSLKADFA823KJFLFASD9')){
 
 $response = curl_exec($ch);
-/*
+
+/**
 if($response === FALSE){
     die(curl_error($ch));
 }
@@ -73,10 +74,10 @@ if($response === FALSE){
 $responseData = json_decode($response, TRUE);
 
 // Print the date from the response
-echo $response; */
+echo $response;**/
 
-}
-else{
-echo "Sin autorización";
-}
+#}
+#else{
+#echo "Sin autorización";
+#}
 ?>	

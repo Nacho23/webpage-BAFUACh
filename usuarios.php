@@ -6,20 +6,26 @@
     session_start();
     if(!isset($_SESSION['usuario'])){
         echo "<script>window.location = 'login.php';</script>";
+    }else{
+        $usuario = $_SESSION['usuario'];
+        $responsabilidad = $_SESSION['responsabilidad'];   
     }
 
     include("conexion.php");
     $link = Conectarse();
 
+    $query_user = "SELECT rut, nombre, apellido_p FROM integrante WHERE rut='$usuario'";
+    $result_user = mysql_query($query_user, $link) or die(mysql_error());
+    $row = mysql_fetch_array($result_user);
+    
+    $nombre = $row['nombre'];
+    $apellido_p = $row['apellido_p'];
+    
+    mysql_free_result($result_user);
+
     $query = "SELECT rut,nombre,apellido_p,DATE_FORMAT(fecha_nac, '%d/%m/%Y') AS fecha_nac,actividad,responsabilidad,correo FROM integrante WHERE rut != 'root'";
     $result = mysql_query($query, $link) or die(mysql_error());
-    if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
-        echo "<table cellpadding=5 cellspacing=1>";
-        echo "<tr>
-            <th></th><th> Rut </th><th>Nombre</th><th>Apellido Paterno</th>
-            <th>Fecha Nacimiento</th><th>Actividad</th><th>Responsabilidad</th>
-            <th>Email</th><th></th>
-        </tr>";
+
 ?>
 
 <html lang="es">
@@ -31,15 +37,20 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
+        <!-- Estilos BOOTSTRAP -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        
+        <!-- Estilos FONTELLO -->
         <link rel="stylesheet" href="css/fontello.css">
+        
         <link rel="stylesheet" href="css/estilos.css">
-        <link rel="stylesheet" href="css/menu.css">
+        <!--<link rel="stylesheet" href="css/menu.css">-->
         <link rel="stylesheet" href="css/banner.css">
         <link rel="stylesheet" href="css/botones.css">
         
         <link rel="stylesheet" href="css/popup.css">
         
-        <link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">
+        <!--<link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">-->
         
         <script lenguage = "javascript">
 			function abrir(url, tipo){
@@ -90,6 +101,14 @@
             function administrarGrupos(){
                 window.location="administrarGrupos.php";
             }
+            function abrirPopup(id){
+                var e = document.getElementById(id);
+                if(e.style.display == 'block'){
+                    e.style.display = 'none';
+                }else{
+                    e.style.display = 'block';
+                }
+            }
 		</script>
         <script type="text/javascript">
             (function(document) {
@@ -135,19 +154,19 @@
     </head>
     
     <body>
-        <!--<div id="popup-box" class="popup-position">
+        <div id="popup-box" class="popup-position">
             <div id="popup-wrapper">
                 <div id="popup-container">
                     <button id="close" onclick="document.getElementById('popup-box').style.display='none'">X</button><br>
                     <div class="popup-text">
                         <h3>Acerca del Proyecto</h3>
-                        <table cellpadding=10>
+                        <table class="table table-striped table-bordered table-hover">
                             <tr>
                                 <td><p align="center"><b>info-BAFUACh</b> es una herramienta sencilla que permite el fácil envío de mensajes, anuncios e información haciendo uso de tecnología Android y Web, proveyendo de acceso más inmediato, de forma rápida y segura del mensaje que se quiera entregar.</p></td>
                             </tr>
-                        </table >
+                        </table>
                         <br>
-                        <table cellpadding=10>
+                        <table class="table table-striped table-bordered table-hover">
                             <tr>
                                 <td><b>OBJETIVO PRINCIPAL:</b></td>
                                 <td>- Optimizar la entrega de información a los integrantes proporcionando una herramienta focalizada en el trabajo que debe realizar.</td>
@@ -186,62 +205,76 @@
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
         
         <header>
-            <div class="contenedor">
-                <a href="menu.php"><h1 class="icon-bafuach"><font color="ffffff">BAFUACh</font></h1></a>
-                <input type="checkbox" id="menu-bar">
-                <label class="icon-menu" for="menu-bar"></label>
-                <nav class="menu">
-                    <a href="" onclick="modPass('modificarContrasenia.php');">Cambiar Contraseña</a>
-                    <a href="javascript:void(0)" onclick="abrirPopup('popup-box');">Acerca del proyecto</a>
-                    <!--<a href="calendario.php">Calendario</a>-->
-                </nav>
-            </div>
-            <script lenguage="javascript">
-                document.getElementById('popup-box').style.display='none';
-            </script>
-        </header>
-        
-        <main>
-            <section id="banner">
-                <img src="imagenes/fondo1.jpg" alt="">
-                <div class="contenedor">
-                    <!--<img src="imagenes/logo2.png" alt="">-->
-                </div>
-            </section>
-            
-            <section id="login">
-                <div class="contenedor">
-                    <h2>Integrantes</h2>
-                    <div class="contenedor" style="margin-bottom: 25px">
-                        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Buscar Integrante">
+            <!-- NAVBAR -->
+            <nav class="navbar navbar-inverse navbar-static-top navbar-fixed-top" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-webEmpresa-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="menu.php">Bienvenido <?php echo $nombre." ".$apellido_p ?></a>
                     </div>
-                    <center>
-                        <div class="datagrid">
-                            <table id="tablaDatos" class="order-table table">
-                                <?php                                
-                                    while($row = mysql_fetch_array($result)){?>
-                                        <tr>
-                                             <td><input type="checkbox" name="rutReg[]" id="rutReg" value="<?php echo $row['rut'] ?>"></td>
-                                             <td align='right'><?php echo $row['rut'] ?></td>
-                                             <td><?php echo $row['nombre'] ?></td>
-                                             <td><?php echo $row['apellido_p'] ?></td>
-                                             <td><?php echo $row['fecha_nac'] ?></td>
-                                             <td><?php echo $row['actividad'] ?></td>
-                                             <td><?php echo $row['responsabilidad'] ?></td>
-                                             <td><?php echo $row['correo'] ?></td>
-                                            <td><input type="submit" name="verFicha[]" id="verFicha" value="ver Ficha" onclick="abrirFicha('<?php echo $row['rut'] ?>');"></td>
-                                        </tr>
-                                    <?php
-                                    }
-                                ?>
-                            </table>
-                        </div>
-                    </center>
+
+                    <div class="collapse navbar-collapse navbar-right" id="bs-webEmpresa-navbar-collapse-1">
+                        <ui class="nav navbar-nav">
+                            <li><a href="javascript:void(0)" onclick="modPass('modificarContrasenia.php');">Cambiar Contraseña</a></li>
+                            <li><a href="javascript:void(0)" onclick="abrirPopup('popup-box');">Acerca del Proyecto</a></li>
+                        </ui>
+                    </div>
                 </div>
-            </section>   
+                <script lenguage="javascript">
+                    document.getElementById('popup-box').style.display='none';
+                </script>
+            </nav>
+        </header>
+
+        <main>
+            <!-- BANNER -->
+            <div class="jumbotron jumbotron-img jum-home">  
+                <div class="container text-left"></div>
+            </div>
+            
+            <!-- TABLA INTEGRANTES -->
+            <div class="container">
+                <h2>Integrantes</h2>
+                <div class="input-group" style="margin-bottom: 30px">
+                    <span class="input-group-addon" id="basic-addon1">Buscar</span>
+                    <input type="search" class="light-table-filter form-control" data-table="order-table" placeholder="Buscar Integrante" aria-describedby="basic-addon1">
+                </div>
+                <div class="datagrid">
+                    <table id="tablaDatos" class="order-table table table-striped table-bordered table-hover">
+                        <?php
+                            if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
+                                echo "<tr>
+                                    <th></th><th> Rut </th><th>Nombre</th><th>Apellido Paterno</th>
+                                    <th>Fecha Nacimiento</th><th>Actividad</th><th>Responsabilidad</th>
+                                    <th>Email</th><th></th>
+                                </tr>";
+                            while($row = mysql_fetch_array($result)){?>
+                                <tr>
+                                     <td><input type="checkbox" name="rutReg[]" id="rutReg" value="<?php echo $row['rut'] ?>" style="cursor: pointer"></td>
+                                     <td align='right'><?php echo $row['rut'] ?></td>
+                                     <td><?php echo $row['nombre'] ?></td>
+                                     <td><?php echo $row['apellido_p'] ?></td>
+                                     <td><?php echo $row['fecha_nac'] ?></td>
+                                     <td><?php echo $row['actividad'] ?></td>
+                                     <td><?php echo $row['responsabilidad'] ?></td>
+                                     <td><?php echo $row['correo'] ?></td>
+                                    <td><input type="submit" name="verFicha[]" id="verFicha" value="ver Ficha" onclick="abrirFicha('<?php echo $row['rut'] ?>');" class="btn btn-default"></td>
+                                </tr>
+                            <?php
+                            }
+                        ?>
+                    </table>
+                </div>
+            </div>
+
             
             <section id="base">
                 <h3></h3>
@@ -254,10 +287,10 @@
                         <a href="" onclick="eliminarUsuario();"><img src="imagenes/icoEliminaUsuario.png" alt=""></a>
                         <h4>Eliminar Integrante</h4>
                     </div>
-                    <div class="botones">
+                    <!--<div class="botones">
                         <a href="" onclick="administrarGrupos();"><img src="imagenes/icoEliminaUsuario.png" alt=""></a>
                         <h4>Administrar Grupos</h4>
-                    </div>
+                    </div>-->
                     <div class="botones">
                         <a href="menu.php"><img src="imagenes/icoVolver.png" alt=""></a>
                         <h4>Atrás</h4>
@@ -277,5 +310,12 @@
                 </div>
             </div>
         </footer>
+        
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>       
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- Codigo JS extra -->
+        
     </body>
 </html>

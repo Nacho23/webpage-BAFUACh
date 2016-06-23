@@ -43,10 +43,12 @@
             mysql_query("INSERT INTO anuncio(titulo, mensaje, fecha) values ('$tituloAnuncio','$mensajeAnuncio','$fecha')");
         }
         
-        include_once 'android/sendNotification.php';
+        include_once './android/sendNotification.php';
 		     
         if(isset($_REQUEST['enviarEmail'])){
             $correo = new PHPMailer();
+            $correo->IsSMTP();
+            $correo->Host = "smtp.example.com";
             
             $varname = $_FILES['inputFile']['name'];
             $vartemp = $_FILES['inputFile']['tmp_name'];
@@ -73,14 +75,13 @@
             $correo->MsgHTML($message);
 
             while($row = mysql_fetch_array($rec)){                
-                if($row['correo'] != ""){
-                    $destino = $row['correo'];
-                    $correo->AddAddress($destino, "");
-                }
+                $destino = $row['correo'];
+                $correo->AddAddress($destino, "");
             }
             
-
             if(!$correo->Send()){
+                #echo "Mailer Error (" . $correo->ErrorInfo . '<br />';
+                #break; //Abandon sending
                 echo '<script lenguage="javascript">
                 alert ("No se pudo enviar el mensaje a los correos electrónicos");
                 self.location = "menu.php";
@@ -88,6 +89,8 @@
             }
             
             mysql_free_result($rec);
+            $correo->clearAddresses();
+            $correo->clearAttachments();
             
         }        
         

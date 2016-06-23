@@ -177,6 +177,12 @@
             <div class="container text-left"></div>
         </div>
             
+        <div class="container">
+            <center>
+                <span class="label label-danger" style="font-size: 12px">Por el momento NO activar el checkbutton "enviar correos electrónicos", se está trabajando en el envío de correos masivos. Muchas Gracias</span>
+            </center>
+        </div>
+        
         <!-- FORMULARIO ENVIAR ANUNCIO -->
         <div class="container-fluid no-padding no-margin background-gray">
             <div class="container margin-top-button container-center">
