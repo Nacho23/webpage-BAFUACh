@@ -46,9 +46,6 @@
         <main>
             <section id="banner">
                 <img src="imagenes/fondo1.jpg" alt="">
-                <div class="contenedor">
-                    <!--<img src="imagenes/logo2.png" alt="">
-                </div>-->
             </section>
             
             <section id="login">

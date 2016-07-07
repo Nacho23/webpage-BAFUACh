@@ -5,7 +5,7 @@
 		$uri = 'http://';
 	}
 	$uri .= $_SERVER['HTTP_HOST'];
-	header('Location: '.$uri.'/login.php');
+	header('Location: '.$uri.'/webpage-BAFUACh/login.php');
 	exit;
 ?>
 

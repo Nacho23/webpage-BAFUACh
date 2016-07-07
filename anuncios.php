@@ -7,6 +7,11 @@
     if(!isset($_SESSION['usuario'])){
         echo "<script>window.location = 'login.php';</script>";
     }
+
+    include("conexion.php");
+    $link = Conectarse();
+    $query = "SELECT id,titulo,mensaje,DATE_FORMAT(fecha, '%d/%m/%Y') AS date,DATE_FORMAT(fecha, '%H:%i:%s') AS hours FROM anuncio";
+    $result = mysql_query($query, $link) or die(mysql_error());
 ?>
 
 <html lang="es">
@@ -17,19 +22,24 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
+        <!-- Estilos BOOTSTRAP -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        
+        <!-- Estilos FONTELLO -->
         <link rel="stylesheet" href="css/fontello.css">
+        
         <link rel="stylesheet" href="css/estilos.css">
-        <link rel="stylesheet" href="css/menu.css">
+        <!--<link rel="stylesheet" href="css/menu.css">-->
         <link rel="stylesheet" href="css/banner.css">
         <link rel="stylesheet" href="css/botones.css">
         
         <link rel="stylesheet" href="css/popup.css">
         
-        <link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">
+        <!--<link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">-->
         
         <script language="javascript">
             function modPass(url){
-                    window.open(url, "Modificar Contraseña", "width=600, height=500, top=50, left=50");
+                    window.open(url, "Modificar Contraseña", "width=600, height=400, top=50, left=50");
                 }
             function abrirPopup(id){
                 var e = document.getElementById(id);
@@ -127,65 +137,66 @@
         </div>
         
         <header>
-            <div class="contenedor">
-                <a href="menu.php"><h1 class="icon-bafuach"><font color="ffffff">BAFUACh</font></h1></a>
-                <input type="checkbox" id="menu-bar">
-                <label class="icon-menu" for="menu-bar"></label>
-                <nav class="menu">
-                    <a href="" onclick="modPass('modificarContrasenia.php');">Cambiar Contraseña</a>
-                    <a href="javascript:void(0)" onclick="abrirPopup('popup-box');">Acerca del proyecto</a>
-                    <!--<a href="calendario.php">Calendario</a>-->
-                </nav>
-            </div>
-            <script lenguage="javascript">
-                document.getElementById('popup-box').style.display='none';
-            </script>
+            <!-- NAVBAR -->
+            <nav class="navbar navbar-inverse navbar-static-top navbar-fixed-top" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-webEmpresa-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="menu.php">BAFUACh</a>
+                    </div>
+
+                    <div class="collapse navbar-collapse navbar-right" id="bs-webEmpresa-navbar-collapse-1">
+                        <ui class="nav navbar-nav">
+                            <li><a href="javascript:void(0)" onclick="modPass('modificarContrasenia.php');">Cambiar Contraseña</a></li>
+                            <li><a href="javascript:void(0)" onclick="abrirPopup('popup-box');">Acerca del Proyecto</a></li>
+                        </ui>
+                    </div>
+                </div>
+                <script lenguage="javascript">
+                    document.getElementById('popup-box').style.display='none';
+                </script>
+            </nav>
         </header>
         
         <main>
+            <!-- BANNER -->
             <section id="banner">
                 <img src="imagenes/fondo1.jpg" alt="">
-                <div class="contenedor">
-                    <!--<img src="imagenes/logo2.png" alt="">
-                </div>-->
             </section>
             
-            <section id="login">
-                <div class="contenedor">
-                    <h2>Mensajes Enviados</h2>
-                    <center>
-                        <table id="tablaDatos">
-				<?php
-					include("conexion.php");
-					$link = Conectarse();
-					$query = "SELECT id,titulo,mensaje,DATE_FORMAT(fecha, '%d/%m/%Y') AS date,DATE_FORMAT(fecha, '%H:%i:%s') AS hours FROM anuncio";
-					$result = mysql_query($query, $link) or die(mysql_error());
-					if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
-					echo "<table cellpadding=10 cellspacing=1>";
-					echo "<tr>
-					        <th></th><th> ID </th><th>Título</th><th>Mensaje</th>
-					        <th>Fecha</th><th>Hora</th>
-					      </tr>";
+            <!-- TABLA ANUNCIOS -->
+            <div class="container" style="margin-bottom: 30px;">
+                <h2>Mensajes Enviados</h2>
+                <?php
+                   if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
+                       echo "<table cellpadding=10 cellspacing=1 class='table table-striped table-bordered table-hover'>";
+                       echo "<tr>
+                       <th></th><th> ID </th><th>Título</th><th>Mensaje</th>
+                       <th>Fecha</th><th>Hora</th>
+                       </tr>";
 
-					while($row = mysql_fetch_array($result)){
-						echo "<tr id='X'>
-								 <td><input type='checkbox' name='anuncioReg[]' value='Titulo: $row[titulo] , Mensaje: $row[mensaje]'></td>
-						         <td align='center'> $row[id] </td>
-						         <td> $row[titulo] </td>
-						         <td> $row[mensaje] </td>
-						         <td> $row[date] </td>
-                                 <td> $row[hours] </td>
-						      </tr>";
-					}
-                mysql_free_result($result);
-				?>
-			</table>
-                    </center>
-                </div>
-            </section>   
+                    while($row = mysql_fetch_array($result)){
+                        echo "<tr id='X'>
+                            <td><input type='checkbox' name='anuncioReg[]' value='Titulo: $row[titulo] , Mensaje: $row[mensaje]'></td>
+                            <td align='center'> $row[id] </td>
+                            <td> $row[titulo] </td>
+                            <td> $row[mensaje] </td>
+                            <td> $row[date] </td>
+                            <td> $row[hours] </td>
+                            </tr>";
+                    }
+                    mysql_free_result($result);
+                    echo "</table>";
+                ?>
+            </div>
+              
             
             <section id="base">
-                <h3></h3>
                 <div class="contenedor">
                     <div class="botones">
                         <a href="" onclick="reenviar();"><img src="imagenes/icoReenviar.png" alt=""></a>
@@ -200,7 +211,6 @@
         </main>
 
         <footer>
-            <br>
             <div class="contenedor">
                 <p class="copy">BAFUACh &copy; 2016</p>
                 <div class="sociales">
@@ -210,5 +220,12 @@
                 </div>
             </div>
         </footer>
+        
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>       
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- Codigo JS extra -->
+        
     </body>
 </html>

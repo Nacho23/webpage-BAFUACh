@@ -4,12 +4,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
         <link rel="shortcut icon" href="imagenes/logo_bafuach.ico">
-        <link rel="stylesheet" href="css/fontello.css">
-        <link rel="stylesheet" href="css/estilos.css">
-        <link rel="stylesheet" href="css/menu.css">
-        <link rel="stylesheet" href="css/botones.css">
         
-        <link rel="stylesheet" type="text/css" href="css/estilo_formulario.css">
+        <!-- Estilos BOOTSTRAP -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        
+        <!-- Estilos FONTELLO -->
+        <link rel="stylesheet" href="css/fontello.css">
+        
+        <link rel="stylesheet" href="css/estilos.css">
+        <!--<link rel="stylesheet" href="css/menu.css">-->
+        <!--<link rel="stylesheet" href="css/botones.css">-->
+        
+        <!--<link rel="stylesheet" type="text/css" href="css/estilo_formulario.css">-->
         
         <script src="http://pajhome.org.uk/crypt/md5/2.2/md5-min.js"></script>
         <script lenguage="javascript">
@@ -46,33 +52,40 @@
                 $benEncr = md5("con Beneficio");
                 /*if(strcmp($tipoEncr, $admEncr) == 0){ ?>*/
                 if($_SESSION['responsabilidad'] != "Integrante"){ ?>
-                    <div class="cont_pass">
-                        <center>
-                            <h2>Modificar Contraseña</h2>
-                            <table width="80%" border="0" cellpadding="5px" cellspacing="5px">
-                                <tr>
-                                    <td><label>Rut: </label></td>
-                                    <td><label><?php echo $_SESSION['usuario']; ?></label></td>
-                                </tr>
-                                <tr>
-                                    <td><label>Tipo: </label></td>
-                                    <td><label><?php echo $_SESSION['responsabilidad']; ?></label></td>
-                                </tr>
-                                <tr>
-                                    <td>Nueva Contraseña: </td>
-                                    <td><input type="password" id="nuevaPass" name="nuevaPass" required></input></td>
-                                </tr>
-                                <tr>
-                                    <td>Repita Nueva Contraseña: </td>
-                                    <td><input type="password" id="nuevaPassRepeat" name="nuevaPassRepeat" required></input></td>
-                                </tr>
-                            </table>
-                            <input id="input_pass" type="submit" name="btnModPass" 
-                                   value="Modificar Contraseña" onclick="guardarPass('<?php echo $usuario ?>');"></input>
-                            <input  id="input_pass" type="submit" name="btnCancelar" 
-                                   value="Cancelar" onclick="Cancelar();"></input>
-                        </center>
-                    </div>
+                <h2 class="text-center"> Modificar Contraseña </h2>
+                    
+                <div class="container" style="margin-top: 30px">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label>Rut: </label>
+                            <label><?php echo $_SESSION['usuario']; ?></label>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label">Email: </label>
+                            <label><?php echo $_SESSION['responsabilidad']; ?></label>
+                        </div>
+                    </form>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">Nueva Contraseña: </label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="nuevaPass" name="nuevaPass" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Repita Nueva Contraseña: </label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="nuevaPassRepeat" name="nuevaPassRepeat" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input id="input_pass" type="submit" class="btn btn-success" name="btnModPass" value="Modificar Contraseña" onclick="guardarPass('<?php echo $usuario ?>');">
+                                <input  id="input_pass" type="submit" class="btn btn-default" name="btnCancelar" value="Cancelar" onclick="Cancelar();">
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <?php
                 }else{
                     echo '<script lengauge="javascript">

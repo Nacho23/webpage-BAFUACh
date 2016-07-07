@@ -14,15 +14,6 @@
     include("conexion.php");
     $link = Conectarse();
 
-    $query_user = "SELECT rut, nombre, apellido_p FROM integrante WHERE rut='$usuario'";
-    $result_user = mysql_query($query_user, $link) or die(mysql_error());
-    $row = mysql_fetch_array($result_user);
-    
-    $nombre = $row['nombre'];
-    $apellido_p = $row['apellido_p'];
-    
-    mysql_free_result($result_user);
-
     $query = "SELECT rut,nombre,apellido_p,DATE_FORMAT(fecha_nac, '%d/%m/%Y') AS fecha_nac,actividad,responsabilidad,correo FROM integrante WHERE rut != 'root'";
     $result = mysql_query($query, $link) or die(mysql_error());
 
@@ -67,8 +58,8 @@
 						checkboxValues.push($(this).val());
 					})                  
 				if(checkboxValues.length != 0){
-					eliminar = confirm("¿Seguro desea eliminar el registro?");
-					if(eliminar){
+                        eliminar = confirm("¿Seguro desea eliminar el registro?");
+                        if(eliminar){
 						var jObject={};
 						for(var i=0;i<checkboxValues.length;i++){
 							jObject[i] = checkboxValues[i];
@@ -96,7 +87,7 @@
                 window.location.href="menu.php";
             }
             function modPass(url){
-                window.open(url, "Modificar Contraseña", "width=600, height=500, top=50, left=50");
+                window.open(url, "Modificar Contraseña", "width=600, height=400, top=50, left=50");
             }
             function administrarGrupos(){
                 window.location="administrarGrupos.php";
@@ -218,7 +209,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="menu.php">Bienvenido <?php echo $nombre." ".$apellido_p ?></a>
+                        <a class="navbar-brand" href="menu.php">BAFUACh</a>
                     </div>
 
                     <div class="collapse navbar-collapse navbar-right" id="bs-webEmpresa-navbar-collapse-1">
@@ -236,9 +227,9 @@
 
         <main>
             <!-- BANNER -->
-            <div class="jumbotron jumbotron-img jum-home">  
-                <div class="container text-left"></div>
-            </div>
+            <section id="banner">
+                <img src="imagenes/fondo1.jpg" alt="">
+            </section>
             
             <!-- TABLA INTEGRANTES -->
             <div class="container">
@@ -248,7 +239,7 @@
                     <input type="search" class="light-table-filter form-control" data-table="order-table" placeholder="Buscar Integrante" aria-describedby="basic-addon1">
                 </div>
                 <div class="datagrid">
-                    <table id="tablaDatos" class="order-table table table-striped table-bordered table-hover">
+                    <table id="tablaDatos" class="table order-table table-striped table-bordered table-hover">
                         <?php
                             if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
                                 echo "<tr>

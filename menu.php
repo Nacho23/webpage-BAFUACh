@@ -37,7 +37,7 @@
           
         <script lenguage="javascript">
             function modPass(url){
-                window.open(url, "Modificar Contraseña", "width=700, height=500, top=50, left=50");
+                window.open(url, "Modificar Contraseña", "width=600, height=400, top=50, left=50");
             }
             function enviarMsg(){
                 var checkboxValues = new Array();
@@ -173,9 +173,9 @@
         
 
         <!-- BANNER -->
-        <div class="jumbotron jumbotron-img jum-home">  
-            <div class="container text-left"></div>
-        </div>
+        <section id="banner">
+            <img src="imagenes/fondo1.jpg" alt="">
+        </section>
             
         <div class="container">
             <center>
