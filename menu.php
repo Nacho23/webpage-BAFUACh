@@ -16,29 +16,40 @@
         <title> BAFUACh - Pantalla Principal </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
-        <link rel="shortcut icon" href="imagenes/logo_bafuach.ico">
+        <link rel="icon" href="imagenes/logo_android.ico">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
         <!-- Estilos BOOTSTRAP -->
         <link rel="stylesheet" href="css/bootstrap.css">
         
+        <!-- Estilos Bootstrap Calendar -->
+        <link rel="stylesheet" href="css/jquery.datetimepicker.css">
+        
         <!-- Estilo Banner -->
         <link rel="stylesheet" href="css/banner.css">
         
+        <!-- Estilo Fontello (Fonts) -->
         <link rel="stylesheet" href="css/fontello.css">
-        <link rel="stylesheet" href="css/estilos.css">
-        <!--<link rel="stylesheet" href="css/menu.css">-->
         
+        <link rel="stylesheet" href="css/estilos.css">
+        
+        <!-- Estilo Botones circulares -->
         <link rel="stylesheet" href="css/botones.css">
         
         <link rel="stylesheet" href="css/popup.css">
         
-        <!--<link rel="stylesheet" type="text/css" href="css/estilo_menu.css">-->
         <link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">
           
+        <!-- FUNCIONES JS -->
         <script lenguage="javascript">
+            
+            //Abrir ventana para modificar contraseña
             function modPass(url){
                 window.open(url, "Modificar Contraseña", "width=600, height=400, top=50, left=50");
             }
+            
+            //Comprobar check del CheckButton para enviar correo electrónico
             function enviarMsg(){
                 var checkboxValues = new Array();
                 if(document.getElementById('enviarEmail').checked){
@@ -47,6 +58,8 @@
                     document.getElementById('msgAdv').innerHTML = '';
                 }  
             }
+            
+            //Abrir Popup de inforamción del proyecto
             function abrirPopup(id){
                 var e = document.getElementById(id);
                 if(e.style.display == 'block'){
@@ -55,6 +68,8 @@
                     e.style.display = 'block';
                 }
             }
+            
+            //Enviar Notificaciones a los smartphones
             function sendPushNotification(id){
                 var data = $('form#'+id).serialize();
                 $('form#'+id).unbind('submit');                
@@ -75,6 +90,41 @@
                 return false;
             }
         </script>
+        <script type="text/javascript">
+            //Muestra Popup de "lugar" y "fecha" cuando se selecciona que es un evento
+            $(document).ready(function(){
+                $("#tipoMsje").change(function(){
+                    var tipoMsje = $('#tipoMsje').val();
+                    if(tipoMsje.localeCompare("Evento") == 0){
+                        $('#myModal').modal('show'); 
+                    }
+                });
+            });
+        </script>
+        <script>
+            //Ingresa datos del formulario para sr enviados.
+            function ingresado(){
+                var fecha_evento = $("#datetimepicker").val();
+                var lugar_evento = $("#inputLugar").val();
+                var titulo = $("#txtTit").val();
+                var mensaje = $("#txtArea").val();
+                var tipoMsje = $("#tipoMsje").val();
+                var listaComboBox = $("#listaComboBox").val();
+                $.ajax({
+                    url: 'ingresado.php',
+                    data: {fecha_evento: fecha_evento,
+                          lugar_evento: lugar_evento,
+                          titulo:titulo,
+                          mensaje:mensaje,
+                          tipoMsje:tipoMsje,
+                          listaComboBox:listaComboBox},
+                    type: 'post',
+                    success: function(data){
+                        alert(data);
+                    }
+                });
+            }
+        </script>
     </head>
     
     <body>
@@ -88,9 +138,22 @@
             $nombre = $row['nombre'];
             $apellido_p = $row['apellido_p'];
             
+            $query_grupos = "SELECT id, nombre FROM grupo WHERE visible = 'true'";
+            $result_grupos = mysql_query($query_grupos, $link);
+            while($row_grupos = mysql_fetch_array($result_grupos)){?>
+                <script>
+                    $(function(){
+                        var valor = "<?php echo $row_grupos['nombre'] ?>";
+                        $("#listaComboBox").append("<option class='list-group-item' value='"+valor+"'>"+valor+"</option>");
+                    })
+                </script><?php 
+            }
+            mysql_free_result($result_grupos);
             mysql_free_result($result);
         
         ?>
+        
+        
         
         <!-- Popup Decripcion Proyecto -->
         <div id="popup-box" class="popup-position">
@@ -177,39 +240,79 @@
             <img src="imagenes/fondo1.jpg" alt="">
         </section>
             
+        <!-- INFORMACIÓN MOMENTANEA EN LA PAGINA -->
         <div class="container">
             <center>
-                <span class="label label-danger" style="font-size: 12px">Por el momento NO activar el checkbutton "enviar correos electrónicos", se está trabajando en el envío de correos masivos. Muchas Gracias</span>
+                <span class="label label-danger" style="font-size: 12px">Se habilitó la opción de crear "grupos" en la ventana de "INTEGRANTES", para poder enviar el anuncio</span>
+                <span class="label label-danger" style="font-size: 12px">No agregar mas de 9 integrantes por grupo, ya que el hosting gratis no deja enviar más de 9 correo al mismo tiempo</span>
             </center>
         </div>
+        
+        <!-- MODAL -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Feha y Lugar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-2 text-center">
+                                <img src="imagenes/icoDateTime.png" alt="icoDateTime" class="img-responsive" style="width: 80px">
+                            </div>
+                            <div id="modal-content" class="col-md-9 text-center">
+                                <input id="inputLugar" type="text" class="form-control" placeholder="Lugar" style="margin-bottom: 10px">
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type="text" class="form-control" id="datetimepicker" placeholder="Fecha/Hora" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="guardarDateTime();" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         
         <!-- FORMULARIO ENVIAR ANUNCIO -->
         <div class="container-fluid no-padding no-margin background-gray">
             <div class="container margin-top-button container-center">
-                <form action="ingresado.php" method="POST" enctype="multipart/form-data">
+                <form enctype="multipart/form-data">
                     <div class="row"> 
-                        <div class="col-md-3 form-group"></div>
-                        <div class="col-md-5 text-rigth">
-                            <input id="txtTit" type="text" name="titulo" required class="form-control" placeholder="Título Mensaje">
-                        </div>
-                        <div class="col-md-1 text-left">
-                            <select name="tipoMsje" size="1" id="tipoMsje">
+                        <div class="form-group"></div>
+                            <div class="col-md-4 col-md-offset-2">
+                                <label></label>
+                                <input id="txtTit" type="text" name="titulo" required class="form-control" placeholder="Título Mensaje">
+                            </div>
+                        <div class="col-md-2">
+                            <label></label>
+                            <select id="tipoMsje" class="form-control" name="tipoMsje" size="1">
                                 <option>Anuncio</option>
                                 <option>Evento</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-left">
+                            <label>Enviar a: </label>
+                            <select id="listaComboBox" class="form-control" name="listaComboBox">
+                                <option class='list-group-item' value='Todos'>Todos</option>
                             </select>
                         </div>
                         <div class="col-md-3 form-group"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <textarea id="txtArea" name="mensaje" required class="form-control" rows="10" placeholder="Escribe aquí tu mensaje" style="margin-top: 25px"></textarea>
+                        <div class="col-md-8 col-md-offset-2">
+                            <textarea id="txtArea" name="mensaje" required class="form-control" rows="10" placeholder="Escribe aquí tu mensaje" ></textarea>
                         </div>
-                        <div class="col-md-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3 text-left">
+                        <div class="col-md-3 col-md-offset-2 text-left">
                             <input id="enviarEmail" type="checkbox" name="enviarEmail[]" onclick="enviarMsg();" value=""><a id="msgCheckbox"> enviar correo electrónico</a>
                         </div>
                         <div class="col-md-3 text-left">
@@ -218,14 +321,13 @@
                         <div class="col-md-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-4 text-left">
+                        <div class="col-md-4 col-md-offset-2 text-left">
                             <label for="exampleInputFile" style="color:rgb(255,255,255)">Adjuntar Archivo</label>
                             <input type="file" id="inputFile" name="inputFile">
                             <p class="help-block" style="color:rgb(170,170,170)">Adjuntar Archivo (Opcional)</p>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-default btn-lg" id="btnEnviar" name="BotonEnviar">Enviar</button>
+                            <button type="submit" onclick="ingresado();" class="btn btn-default btn-lg" id="btnEnviar" name="BotonEnviar">Enviar</button>
                         </div>
                     </div>
                 </form>
@@ -267,6 +369,15 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>       
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
+        <!-- Moment (necessary for Bootstrap calendar) -->
+        <script src="js/jquery.datetimepicker.full.js"></script>
         <!-- Codigo JS extra -->
+        
+        <!-- Captura la fecha y hora y lo muestra en el input id=datetimepicker -->
+        <script>
+            var actual = $('#datetimepicker').datetimepicker()
+            $('#datetimepicker').datetimepicker({value:actual, format:'d-m-Y H:i'});
+        </script>
+        
     </body>
 </html>

@@ -24,7 +24,7 @@
         <title> BAFUACh - Integrantes </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
-        <link rel="shortcut icon" href="imagenes/logo_bafuach.ico">
+        <link rel="icon" href="imagenes/logo_android.ico">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
@@ -88,9 +88,6 @@
             }
             function modPass(url){
                 window.open(url, "Modificar Contraseña", "width=600, height=400, top=50, left=50");
-            }
-            function administrarGrupos(){
-                window.location="administrarGrupos.php";
             }
             function abrirPopup(id){
                 var e = document.getElementById(id);
@@ -278,10 +275,10 @@
                         <a href="" onclick="eliminarUsuario();"><img src="imagenes/icoEliminaUsuario.png" alt=""></a>
                         <h4>Eliminar Integrante</h4>
                     </div>
-                    <!--<div class="botones">
-                        <a href="" onclick="administrarGrupos();"><img src="imagenes/icoEliminaUsuario.png" alt=""></a>
+                    <div class="botones">
+                        <a href="administrarGrupos.php"><img src="imagenes/icoAdministrarGrupos.png" alt=""></a>
                         <h4>Administrar Grupos</h4>
-                    </div>-->
+                    </div>
                     <div class="botones">
                         <a href="menu.php"><img src="imagenes/icoVolver.png" alt=""></a>
                         <h4>Atrás</h4>

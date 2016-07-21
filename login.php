@@ -13,15 +13,23 @@
         <title> BAFUACh </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
-        <link rel="shortcut icon" href="imagenes/logo_bafuach.ico">
-        <link rel="stylesheet" href="css/fontello.css">
-        <link rel="stylesheet" href="css/estilos.css">
-        <link rel="stylesheet" href="css/menu.css">
-        <link rel="stylesheet" href="css/banner.css">
-        <link rel="stylesheet" href="css/botones.css">
+        <link rel="icon" href="imagenes/logo_android.ico">
         
+        <!-- Estilos Bootstrap -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        
+        <!-- Estilo Fontello (fonts) -->
+        <link rel="stylesheet" href="css/fontello.css">
+        
+        <link rel="stylesheet" href="css/estilos.css">
+        
+        <!-- Estilo Banner -->
+        <link rel="stylesheet" href="css/banner.css">
+        
+        <!-- Estilo formulario login -->
         <link rel="stylesheet" type="text/css" href="css/login.css">
         
+        <!-- Funciones JS -->
         <script lenguage="javascript">
             function recordar_pass(url){
                 window.open(url, "Recordar Contraseña", "width=700, height=400, top=50, left=50");
@@ -31,57 +39,38 @@
     </head>
     
     <body>
-        <header>
-            <div class="contenedor">
-                <h1 class="icon-bafuach">BAFUACh</h1>
-                <input type="checkbox" id="menu-bar">
-                <!--<label class="icon-menu" for="menu-bar">menu</label>
-                <nav class="menu">
-                    <a href="">INICIO</a>
-                    <a href="">INICIO 2</a>
-                </nav>-->
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-inverse navbar-static-top navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">BAFUACh</a>
+                </div>
             </div>
-        </header>
+        </nav>
         
         <main>
+            <!-- BANNER -->
             <section id="banner">
                 <img src="imagenes/fondo1.jpg" alt="">
             </section>
             
+            <!-- FORMULARIO LOGIN -->
             <section id="login">
-                <div class="contenedor">
+                <div class="container">
                     <center>
-                        <form action="validar.php" method="POST">
+                        <form action="validar.php" method="POST" style="margin-bottom: 15px">
                             <h2>Bienvenido</h2>
-                            <input type="text" placeholder="&#128272; Usuario" name="usuario" required></input>
-                            <input type="password" placeholder="&#128272; Contraseña" name="clave" required></input>
-                            <input type="submit" value="Ingresar"></input>
+                            <input type="text" class="form-control" name="usuario" placeholder="&#128272; Usuario"  required>
+                            <input type="password" class="form-control" name="clave" placeholder="&#128272; Contraseña" required>
+                            <input type="submit" value="Ingresar">
                         </form>
-                        <br>
                         <a href="javascript:void(0)" onclick="recordar_pass('recordarPass.php');"><label>¿Olvidaste tu contraseña?</label></a>
                     </center>
                 </div>
             </section>   
-            
-            <!--<section id="base">
-                <h3>cuaquier titulo</h3>
-                <div class="contenedor">
-                    <div class="botones">
-                        <img src="imagenes/icoAnuncios.png" alt="">
-                        <h4>boton 1</h4>
-                    </div>
-                    <div class="botones">
-                        <img src="imagenes/icoUsuario.png" alt="">
-                        <h4>boton 2</h4>
-                    </div>
-                    <div class="botones">
-                        <img src="imagenes/icoSalir.png" alt="">
-                        <h4>boton 3 </h4>
-                    </div>
-                </div>
-            </section>-->
         </main>
 
+        <!-- FOOTER -->
         <footer>
             <br>
             <div class="contenedor">

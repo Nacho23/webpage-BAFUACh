@@ -14,7 +14,7 @@
         <title> BAFUACh - Administrar Grupos </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
-        <link rel="shortcut icon" href="imagenes/logo_bafuach.ico">
+        <link rel="icon" href="imagenes/logo_android.ico">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
@@ -24,38 +24,14 @@
         <!-- Estilo Banner -->
         <link rel="stylesheet" href="css/banner.css">
         
+        <!-- Estilo Fontello (Fonts) -->
         <link rel="stylesheet" href="css/fontello.css">
-
-        <link rel="stylesheet" href="css/botones.css">
-        
-        <link rel="stylesheet" href="css/popup.css">
         
         <link rel="stylesheet" type="text/css" href="css/estilo_tablasConsultas.css">
         
-        <script lenguage = "javascript">
-			function abrir(url, tipo){
-                console.log(tipo);
-                if(tipo != "Administrador"){
-                    alert("No tiene permisos para realizar la funcion");
-                }else{
-                    window.open(url, "Formulario Usuario", "width=1250, height=650, top=10, left=50, scrollbars=yes");   
-                }
-			}
-            function abrirFicha(rut){
-                url ="fichaIntegrante.php?rut="+rut;
-                window.location.href=url;
-            }
-            function volver(){
-                window.location.href="menu.php";
-            }
-            function modPass(url){
-                window.open(url, "Modificar Contraseña", "width=600, height=500, top=50, left=50");
-            }
-            function administrarGrupos(){
-                window.location.href="administrarGrupos.php";
-            }
-		</script>
+        <!-- FUNCIONES JS -->
         <script>
+            //Agrega integrantes a un grupo
             function agregar(){
                 var rutIntegrante = document.getElementById("listaIntegrantes").value;
                 var nomGrupo = $("#listaGruposComboBox").val();
@@ -68,7 +44,7 @@
                     }
                 });
             }
-            
+            //Elimina integrantes de un grupo
             function eliminar(){
                 var rutIntegrante = document.getElementById("listaGrupo").value;
                 var nomGrupo = $("#listaGruposComboBox").val();
@@ -134,14 +110,7 @@
     <script>
         $(function (){
             for (var i = 0; i < arregloIntegrantes.length; i++){
-                //console.log("hola");
-                //$("#listaIntegrantes").append("<option class='list-group-item'>"+arregloIntegrantes[i]+"</option>");
                 $("#listaIntegrantes").append("<option ondblclick='agregar();' class='list-group-item' value="+arregloRutIntegrantes[i]+" name="+arregloIntegrantes[i]+">"+arregloIntegrantes[i]+"</option>");
-                //var htmlListaIntegrantes = document.getElementById("listaIntegrantes")
-                //var option = document.createElement("option");
-                //var valor = document.createTextNode(arregloIntegrantes[i]);
-                //option.appendChild(valor);
-                //htmlListaIntegrantes.appendChild(option);
             }
         });
     </script>
@@ -210,11 +179,12 @@
        
         
         <main>
-        
-            <div class="jumbotron jumbotron-img jum-home">  
-                <div class="container text-left"></div>
-            </div>
+            <!-- BANNER -->
+            <section id="banner">
+                <img src="imagenes/fondo1.jpg" alt="">
+            </section>
             
+            <!-- Panel de Grupos -->
             <div class="row">
                 <div class="col-md-5 col-md-offset-1">
                     <div class="panel panel-default">
@@ -228,18 +198,7 @@
                                         <option class='list-group-item' value="0" name="---">---</option>
                                     </select>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Opciones</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div class="col-xs-8 selectContainer">
+                                <div class="col-xs-6 selectContainer">
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearGrupo">Crear Grupo</button>
                                         <button type="button" onclick="eliminarGrupo();" class="btn btn-default">Eliminar Grupo</button>
@@ -273,6 +232,7 @@
                 </div>
             </div>
 
+            <!-- Panel de lista de integrantes -->
             <div class="container">
                 <div class="row">
                     <div class="col-md-5">
@@ -291,7 +251,7 @@
                     <div class="col-md-5">
                         <div class="list-group">
                             <a href="#" id="tituloGrupo" class="list-group-item disabled">
-                                "Nombre Grupo"
+                                Grupo
                             </a>
                             <select id="listaGrupo" class="form-control" MULTIPLE style="height: 300px">
                             </select>
@@ -299,24 +259,12 @@
                     </div>
                 </div>
             </div>            
-                
-            <section id="base">
-                <h3></h3>
-                <div class="contenedor" style="height: 100px">
-                    
-                </div>
-            </section>
         </main>
 
+        <!-- FOOTER -->
         <footer>
-            <br>
-            <div class="contenedor">
-                <p class="copy">BAFUACh &copy; 2016</p>
-                <div class="sociales">
-                    <a class="icon-facebook-squared" href="https://www.facebook.com/BAFUACh/"></a>
-                    <a class="icon-twitter" href="https://twitter.com/Bafuach"></a>
-                    <a class="icon-website" href="http://bafuach.jimdo.com/"></a>
-                </div>
+            <div style="background: #333">
+                <label style="padding: 50px"></label>
             </div>
         </footer>
         
@@ -327,13 +275,11 @@
         <!-- Codigo JS extra -->
         <script>
         $('#modalCrearGrupo').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
-            modal.find('.modal-title').text('Nuevo Grupo')
-            modal.find('.modal-body input').val(recipient)
+            var button = $(event.relatedTarget);
+            var recipient = button.data('whatever');
+            var modal = $(this);
+            modal.find('.modal-title').text('Nuevo Grupo');
+            modal.find('.modal-body input').val(recipient);
         })
         </script>
     </body>

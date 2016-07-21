@@ -19,6 +19,7 @@
         <title> BAFUACh - Mensajes Enviados </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
+        <link rel="icon" href="imagenes/logo_android.ico">
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         
@@ -78,7 +79,39 @@
                 }
 			}
         </script>
-        
+        <script>
+            function asistentes(idAnuncio){ 
+                
+                $.ajax({
+                    url: 'mostrarAsistentes.php',
+                    data: {idAnuncio: idAnuncio},
+                    type: 'post',
+                    success: function(data){
+                        $('#modal-content').append(data);
+                        $('#myModal').modal('show');
+                    }
+                });
+            }
+        </script>
+        <script>
+            function no_asistentes(idAnuncio){  
+                
+                $.ajax({
+                    url: 'mostrarNoAsistentes.php',
+                    data: {idAnuncio: idAnuncio},
+                    type: 'post',
+                    success: function(data){
+                        $('#modal-content').append(data);
+                        $('#myModal').modal('show');
+                    }
+                });
+            }
+        </script>
+        <script>
+            function limpiarDiv(){
+                $('#modal-content').empty();
+            }
+        </script>
     </head>
     
     <body>
@@ -163,6 +196,27 @@
             </nav>
         </header>
         
+        <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Respuestas</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div id="modal-content" class="col-md-offset-1 col-md-9 text-center">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="limpiarDiv();" type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        
         <main>
             <!-- BANNER -->
             <section id="banner">
@@ -173,26 +227,34 @@
             <div class="container" style="margin-bottom: 30px;">
                 <h2>Mensajes Enviados</h2>
                 <?php
-                   if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");
-                       echo "<table cellpadding=10 cellspacing=1 class='table table-striped table-bordered table-hover'>";
-                       echo "<tr>
-                       <th></th><th> ID </th><th>Título</th><th>Mensaje</th>
-                       <th>Fecha</th><th>Hora</th>
-                       </tr>";
-
-                    while($row = mysql_fetch_array($result)){
-                        echo "<tr id='X'>
-                            <td><input type='checkbox' name='anuncioReg[]' value='Titulo: $row[titulo] , Mensaje: $row[mensaje]'></td>
-                            <td align='center'> $row[id] </td>
-                            <td> $row[titulo] </td>
-                            <td> $row[mensaje] </td>
-                            <td> $row[date] </td>
-                            <td> $row[hours] </td>
-                            </tr>";
-                    }
-                    mysql_free_result($result);
-                    echo "</table>";
-                ?>
+                   if(mysql_num_rows($result) == 0) die ("No hay registros para mostrar");?>
+                        <table cellpadding=10 cellspacing=1 class='table table-striped table-bordered table-hover'>
+                            <tr>
+                                <th></th>
+                                <th> ID </th>
+                                <th>Título</th>
+                                <th>Mensaje</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Respuestas</th>
+                            </tr>
+                    <?php
+                    while($row = mysql_fetch_array($result)){?>
+                        <tr id="X">
+                            <td><input type="checkbox" name="anuncioReg[]" value="Titulo: <?php echo $row['titulo'] ?>, Mensaje:  <?php echo $row['mensaje'] ?>"></td>
+                            <td align="center"><?php echo $row['id'] ?></td>
+                            <td><?php echo $row['titulo'] ?></td>
+                            <td><?php echo $row['mensaje'] ?></td>
+                            <td><?php echo $row['date'] ?></td>
+                            <td><?php echo $row['hours'] ?></td>
+                            <td>
+                                <input id="btnAsistentes" type="button" class="btn btn-success" value="Asistirán" onclick="asistentes('<?php echo $row['id'] ?>');">
+                                <input id="btnNoAsistentes" type="button" class="btn btn-default" value="No Asistirán" onclick="no_asistentes('<?php echo $row['id'] ?>');">
+                            </td>
+                        </tr>
+                    <?php }
+                    mysql_free_result($result);?>
+                </table>
             </div>
               
             
@@ -226,6 +288,7 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <!-- Codigo JS extra -->
+        
         
     </body>
 </html>
